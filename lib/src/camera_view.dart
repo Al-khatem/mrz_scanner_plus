@@ -1,6 +1,7 @@
+import 'dart:developer';
 import 'dart:io';
+import 'dart:math' show pi;
 import 'dart:ui' as ui;
-import 'dart:math';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -131,7 +132,7 @@ class _CameraViewState extends State<CameraView>
           });
         }
       } catch (e) {
-        debugPrint(e.toString());
+        log(e.toString());
       } finally {
         _isProcessing = false;
       }

@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
 import 'package:mrz_scanner_plus/src/mrz_parser/mrz_parser.dart';
 import 'package:mrz_scanner_plus/src/mrz_parser/mrz_result.dart';
 
@@ -87,12 +86,10 @@ class MRZHelper {
 
     final mrzLines = _filterAvaliableLines(ableToScanText);
     for (final mrz2Line in mrzLines) {
-      debugPrint('OCR:\n${mrz2Line.join('\n')}');
       var lines = MRZHelper.getFinalListToParse(mrz2Line);
       if (lines != null && lines.isNotEmpty) {
         try {
           final mrzResult = MRZParser.parse(lines);
-          debugPrint('$mrzResult');
           return mrzResult;
         } catch (e) {
           log(e.toString());
