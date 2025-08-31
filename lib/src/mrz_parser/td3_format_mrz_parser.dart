@@ -23,7 +23,7 @@ class _TD3MRZFormatParser {
     final countryCodeRaw = firstLine.substring(2, 5);
     final namesRaw = firstLine.substring(5);
     final documentNumberRaw = secondLine.substring(0, 9);
-    final documentNumberCheckDigitRaw = secondLine[9];
+    // final documentNumberCheckDigitRaw = secondLine[9];
     final nationalityRaw = secondLine.substring(10, 13);
     final birthDateRaw = secondLine.substring(13, 19);
     final birthDateCheckDigitRaw = secondLine[19];
@@ -31,8 +31,8 @@ class _TD3MRZFormatParser {
     final expiryDateRaw = secondLine.substring(21, 27);
     final expiryDateCheckDigitRaw = secondLine[27];
     final optionalDataRaw = secondLine.substring(28, isVisaDocument ? 44 : 42);
-    final optionalDataCheckDigitRaw = isVisaDocument ? null : secondLine[42];
-    final finalCheckDigitRaw = isVisaDocument ? null : secondLine.substring(43);
+    // final optionalDataCheckDigitRaw = isVisaDocument ? null : secondLine[42];
+    // final finalCheckDigitRaw = isVisaDocument ? null : secondLine.substring(43);
 
     final documentTypeFixed =
         MRZFieldRecognitionDefectsFixer.fixDocumentType(documentTypeRaw);

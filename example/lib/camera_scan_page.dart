@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mrz_scanner_plus/mrz_scanner_plus.dart';
-import 'package:mrz_scanner_plus/src/camera_view.dart';
 
 class CameraScanPage extends StatefulWidget {
   const CameraScanPage({super.key});

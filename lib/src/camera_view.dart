@@ -58,11 +58,14 @@ class CameraView extends StatefulWidget {
   State<CameraView> createState() => _CameraViewState();
 }
 
-class _CameraViewState extends State<CameraView> with SingleTickerProviderStateMixin {
+class _CameraViewState extends State<CameraView>
+    with SingleTickerProviderStateMixin {
   CameraController? _controller;
   late TextRecognizer _textRecognizer;
 
   late AnimationController _animationController;
+
+  late final mediaQuery = MediaQuery.sizeOf(context);
 
   @override
   void initState() {
@@ -88,11 +91,15 @@ class _CameraViewState extends State<CameraView> with SingleTickerProviderStateM
 
     await _controller?.initialize();
     if (widget.mode == CameraMode.scan) {
-      await Future.delayed(Duration(milliseconds: Platform.isAndroid ? 500 : 2000));
+      await Future.delayed(
+          Duration(milliseconds: Platform.isAndroid ? 500 : 2000));
       await _startImageStream();
     }
-    if (mounted) setState(() {});
-    widget.controller?._bind(_controller, context);
+
+    if (!mounted) return;
+    setState(() {
+      widget.controller?._bind(_controller, context);
+    });
   }
 
   bool _isProcessing = false;
@@ -101,7 +108,8 @@ class _CameraViewState extends State<CameraView> with SingleTickerProviderStateM
   Future<void> _startImageStream() async {
     _controller?.startImageStream((CameraImage image) async {
       final now = DateTime.now();
-      if (_isProcessing || now.difference(_lastProcessTime).inMilliseconds < 500) {
+      if (_isProcessing ||
+          now.difference(_lastProcessTime).inMilliseconds < 500) {
         return;
       }
       _isProcessing = true;
@@ -137,7 +145,8 @@ class _CameraViewState extends State<CameraView> with SingleTickerProviderStateM
     }
     final bytes = allBytes.done().buffer.asUint8List();
 
-    final Size imageSize = Size(image.width.toDouble(), image.height.toDouble());
+    final Size imageSize =
+        Size(image.width.toDouble(), image.height.toDouble());
     const InputImageRotation imageRotation = InputImageRotation.rotation0deg;
 
     return InputImage.fromBytes(
@@ -145,7 +154,9 @@ class _CameraViewState extends State<CameraView> with SingleTickerProviderStateM
       metadata: InputImageMetadata(
         size: imageSize,
         rotation: imageRotation,
-        format: Platform.isAndroid ? InputImageFormat.nv21 : InputImageFormat.bgra8888,
+        format: Platform.isAndroid
+            ? InputImageFormat.nv21
+            : InputImageFormat.bgra8888,
         bytesPerRow: image.planes.first.bytesPerRow,
       ),
     );
@@ -197,7 +208,8 @@ class _CameraViewState extends State<CameraView> with SingleTickerProviderStateM
                 return CustomPaint(
                   painter: MaskPainter(
                     animationValue: _animationController.value,
-                    indicatorColor: widget.indicatorColor ?? const Color(0xFFE1DED7),
+                    indicatorColor:
+                        widget.indicatorColor ?? const Color(0xFFE1DED7),
                   ),
                   size: Size.infinite,
                   child: Container(),
@@ -214,7 +226,8 @@ class _CameraViewState extends State<CameraView> with SingleTickerProviderStateM
             size: Size.infinite,
             child: Container(),
           ),
-        if (widget.mode == CameraMode.photo) widget.photoButton ?? _photoWidget(),
+        if (widget.mode == CameraMode.photo)
+          widget.photoButton ?? _photoWidget(),
       ],
     );
   }
@@ -230,7 +243,9 @@ class _CameraViewState extends State<CameraView> with SingleTickerProviderStateM
         alignment: Alignment.center,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(width: 3, color: widget.indicatorColor ?? const Color(0xFFE1DED7)),
+          border: Border.all(
+              width: 3,
+              color: widget.indicatorColor ?? const Color(0xFFE1DED7)),
         ),
         child: Container(
           width: 85,
@@ -260,8 +275,8 @@ class _CameraViewState extends State<CameraView> with SingleTickerProviderStateM
     final image = await decodeImageFromList(bytes);
 
     // 获取预览尺寸和实际图片尺寸
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = mediaQuery.width;
+    final screenHeight = mediaQuery.height;
 
     final screenRatio = screenWidth / screenHeight;
     final realWidth = image.height * screenRatio;
@@ -313,7 +328,8 @@ class _CameraViewState extends State<CameraView> with SingleTickerProviderStateM
       cardHeight.round(),
     );
     // 转换为字节数据
-    final ByteData? byteData = await processedImage.toByteData(format: ui.ImageByteFormat.png);
+    final ByteData? byteData =
+        await processedImage.toByteData(format: ui.ImageByteFormat.png);
     final Uint8List processedBytes = byteData!.buffer.asUint8List();
     await imageFile.writeAsBytes(processedBytes);
 
