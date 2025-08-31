@@ -1,4 +1,4 @@
-import 'dart:nativewrappers/_internal/vm/lib/developer.dart';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:mrz_scanner_plus/src/mrz_parser/mrz_parser.dart';
